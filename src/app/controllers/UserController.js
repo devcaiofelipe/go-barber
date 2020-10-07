@@ -1,4 +1,5 @@
 import User from '../models/User';
+import Cache from '../../lib/Cache';
 
 
 class UserController {
@@ -14,6 +15,11 @@ class UserController {
     };
 
     const { id, name, email, provider } = await User.create(req.body);
+
+    if(provider) {
+      await Cache.invalidate('providers');
+    };
+
     return res.json({
       id,
       name,
